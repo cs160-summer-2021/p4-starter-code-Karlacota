@@ -5,75 +5,179 @@
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>P4 Drawing</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>World</title>
 
     <link rel="stylesheet" type="text/css" href="{% static 'draw/vendor/bootstrap/css/bootstrap.min.css' %}">
     <script type="text/javascript" src="{% static 'draw/vendor/jquery/jquery-3.3.1.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'draw/vendor/paper/paper-full.min.js' %}"></script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="/resources/demos/style.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@900&display=swap" rel="stylesheet">
 
-    <style type="text/css">
-    </style>
+<style>
+#draggable { width: 150px; height: 150px; padding: 0.5em; }
+.fs-1 {
+font-family: font-family: 'Roboto', sans-serif;
+font-size: 40px;
+font-weight: 700;
+line-height: 50px;
+}
 
-</head>
+body {
+  background-image: url('mars.jpeg');
+}
 
-<body>
-    <!-- You may change the dimensions of this canvas -->
-    <canvas id="myCanvas" width="750px" height="750px"></canvas>
-</body>
+</style>
+
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script>
-    // setting up the canvas and one paper tool
-    var canvas = document.getElementById('myCanvas');
-    paper.setup(canvas);
-    var tool = new paper.Tool();
-    var uid = Date.now() % 10000;
-    var path = new paper.Path();
-    const color = getRandomColor();
-    path.strokeColor = color;
-    // keep track of small windows paths
-    var smallSockets = new Map();
-    //smallSockets.set(uid,path);
+$( function() {
+  $( ".draggable" ).draggable();
+} );
 
-    // https://stackoverflow.com/questions/1484506/random-color-generator
-    function getRandomColor() {
-        var letters = '0123456789ABCDEF';
-        var color = '#';
-        for (var i = 0; i < 6; i++) {
-            color += letters[Math.floor(Math.random() * 16)];
-        }
-        return color;
-    }
+$( function() {
+  $( "#draggable2" ).draggable();
+} );
 
-    // getting the URL (you may want to use for Exercise 3)
-    var url = window.location.href;
-
-    var socket = new WebSocket(
-        'ws://' + window.location.host + '/ws/draw');
-
-
-        tool.onMouseDrag = function (event) {
-            path.add(event.point);
-            socket.send("{\"x\" : " + event.point.x + ", \"y\" : " + event.point.y + ", \"uid\" : " + uid + ", \"color\" : " + "\""+color+"\"" + "}" );
-        }
-
-
-    if(url.indexOf("large") > -1){
-        socket.onmessage = function (receivedMessage) {
-            var received = JSON.parse(receivedMessage.data);
-            console.log("Received: " + JSON.stringify(received));
-            var id = received.uid;
-            if (! smallSockets.has(id)) {
-                smallSockets.set(id, new paper.Path());
-            }
-            smallSockets.get(id).strokeColor = received.color;
-            smallSockets.get(id).add(new paper.Point(received.x, received.y));
-            // You will probably want to add some code here to draw more lines.
-        }
-    }
-
-    socket.onclose = function (e) {
-        console.error('Chat socket closed unexpectedly');
-    };
-
+$( function() {
+  $( "#tabs" ).tabs();
+} );
 </script>
+
+  </head>
+
+  <body>
+    <center> <div class="row pt-3">
+        <div class="col">
+      <p class="fs-1">Build your world<img src="{% static 'images/world.png' %}" alt="..." height="40" width="40"></p>
+      </div>
+    </div></center>
+
+    <center><div class="row">
+      <div class="col">
+    <p class="fs-2">Drag and Drop Objects</p>
+    </div>
+  </div></center>
+
+    <div id="tabs">
+      <ul>
+        <li><a href="#tabs-1">Animals</a></li>
+        <li><a href="#tabs-2">Structures</a></li>
+        <li><a href="#tabs-3">Random</a></li>
+      </ul>
+<p class="fs-2"> Available Objects:</p>
+      <div id="tabs-1">
+        <div class= "row">
+        <div class= "col">
+        <div class="draggable">
+          <img src="{% static 'images/horse.png' %}"  alt="..." width="150" height="150">
+        </div></div>
+        <div class="col">
+        <div class="draggable">
+          <img src="{% static 'images/cow.png' %}"  alt="..." width="150" height="150">
+        </div>
+        </div>
+        <div class="col">
+        <div class="draggable">
+          <img src="{% static 'images/pig.png' %}"  alt="..." width="150" height="150">
+        </div>
+        </div>
+        <div class="col">
+        <div class="draggable">
+          <img src="{% static 'images/goat.png' %}"  alt="..." width="150" height="150">
+        </div>
+        </div>
+        <div class="col">
+        <div class="draggable">
+          <img src="{% static 'images/chicken.png' %}"  alt="..." width="150" height="150">
+        </div>
+        </div>
+        <div class="col">
+        <div class="draggable">
+          <img src="{% static 'images/sheep2.png' %}"  alt="..." width="130" height="130">
+        </div>
+        </div>
+      </div>
+    </div>
+
+      <div id="tabs-2">
+        <div class= "row">
+        <div clas= "col">
+        <div class="draggable">
+          <img src="{% static 'images/building.png' %}"  alt="..." width="150" height="150">
+        </div></div>
+        <div class="col">
+        <div class="draggable">
+          <img src="{% static 'images/cabin.png' %}"  alt="..." width="150" height="150">
+        </div>
+        </div>
+        <div class="col">
+        <div class="draggable">
+          <img src="{% static 'images/house.png' %}"  alt="..." width="150" height="150">
+        </div>
+        </div>
+        <div class="col">
+        <div class="draggable">
+          <img src="{% static 'images/igloo.png' %}"  alt="..." width="150" height="150">
+        </div>
+        </div>
+        <div class="col">
+        <div class="draggable">
+          <img src="{% static 'images/pyramid.png' %}"  alt="..." width="150" height="150">
+        </div>
+        </div>
+        <div class="col">
+         <div class="draggable">
+          <img src="{% static 'images/tent.png' %}"  alt="..." width="130" height="130">
+        </div>
+        </div>
+      </div>
+      </div>
+
+
+      <div id="tabs-3">
+        <div class= "row">
+        <div clas= "col">
+        <div class="draggable">
+          <img src="{% static 'images/boat.png' %}"  alt="..." width="150" height="150">
+        </div></div>
+        <div class="col">
+        <div class="draggable">
+          <img src="{% static 'images/drone.png' %}"  alt="..." width="150" height="150">
+        </div>
+        </div>
+        <div class="col">
+        <div class="draggable">
+          <img src="{% static 'images/eiffel.png' %}"  alt="..." width="150" height="150">
+        </div>
+        </div>
+        <div class="col">
+        <div class="draggable">
+          <img src="{% static 'images/lorax.png' %}"  alt="..." width="150" height="150">
+        </div>
+        </div>
+        <div class="col">
+        <div class="draggable">
+          <img src="{% static 'images/spaceship.png' %}"  alt="..." width="150" height="150">
+        </div>
+        </div>
+        <div class="col">
+        <div class="draggable">
+          <img src="{% static 'images/pool.png' %}"  alt="..." width="130" height="130">
+        </div>
+        </div>
+      </div>
+      </div>
+    </div>
+
+
+<p>Chosen Objects:</p>
+
+</body>
 
 </html>
