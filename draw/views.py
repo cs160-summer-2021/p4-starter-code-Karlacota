@@ -18,3 +18,11 @@ def structures(request):
 
 def result(request):
     return render(request, 'draw/result.html')
+
+def v2(request):
+    return render(request, 'draw/v2.html')
+
+def room(request, room_name):
+    return render(request, 'draw/room.html', {
+        'room_name': room_name
+    })
